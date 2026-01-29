@@ -70,7 +70,7 @@ Window {
     Rectangle {
         id: barrel
         x: root.width / 2 - 2
-        y: root.height * 0.85 - 18
+        y: root.height * 0.85 - 48
         width: 4; height: 30
         color: "#ccc"
         antialiasing: true
