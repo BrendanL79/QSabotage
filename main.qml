@@ -7,7 +7,7 @@ Window {
     width: 800; height: 600
     visible: true
     title: "Sabotage!"
-    color: "#1a1a2e"
+    color: retroMode ? "#000000" : "#1a1a2e"
 
     property int score: 0
     property int lives: 3
@@ -41,6 +41,7 @@ Window {
 
     // Sky gradient
     Rectangle {
+        visible: !retroMode
         anchors.fill: parent
         gradient: Gradient {
             GradientStop { position: 0.0; color: "#0f0c29" }
@@ -55,6 +56,7 @@ Window {
     Repeater {
         model: 60
         Rectangle {
+            visible: !retroMode
             x: Math.random() * root.width
             y: Math.random() * root.height * 0.5
             width: Math.random() < 0.3 ? 2 : 1
@@ -68,8 +70,9 @@ Window {
     Rectangle {
         id: ground
         x: 0; y: root.height * 0.85
-        width: root.width; height: root.height * 0.15
-        color: "transparent"
+        width: root.width
+        height: retroMode ? 3 : root.height * 0.15
+        color: retroMode ? "#00ff00" : "transparent"
     }
 
     Turret {
