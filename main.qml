@@ -174,7 +174,7 @@ Window {
     // Helicopters
     Repeater {
         model: heliModel
-        Helicopter {}
+        Helicopter { retroMode: root.retroMode }
     }
 
     // Paratroopers
