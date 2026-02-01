@@ -17,6 +17,7 @@ Window {
     property int landedLeft: 0
     property int landedRight: 0
     property int maxLanded: 4
+    property bool retroMode: false
 
     // Sound effects
     SoundEffect { id: fireSound; source: "sounds/fire.wav" }
@@ -102,6 +103,11 @@ Window {
         anchors.fill: parent
         focus: true
         Keys.onPressed: function(event) {
+            if (event.key === Qt.Key_QuoteLeft) {
+                retroMode = !retroMode
+                event.accepted = true
+                return
+            }
             if (gameOver && event.key === Qt.Key_R) {
                 restartGame()
                 event.accepted = true
