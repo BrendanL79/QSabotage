@@ -4,7 +4,7 @@ QML remake of the classic 1981 Apple II arcade game "Sabotage". Player controls 
 
 ## Tech Stack
 
-- **Pure QML/Qt Quick 2.15** — no C++ backend
+- **Pure QML/Qt6 Quick** — no C++ backend, uses QtMultimedia for sound
 - Orchestrator: `main.qml` (~451 lines) + 4 component files
 - 60 FPS timer-based game loop with AABB collision detection
 - Entity management via QML ListModels + Repeaters
@@ -19,6 +19,8 @@ QML remake of the classic 1981 Apple II arcade game "Sabotage". Player controls 
 | `Helicopter.qml` | Helicopter body, cockpit, tail, animated rotor |
 | `Paratrooper.qml` | Stick figure with parachute canopy and lines |
 | `Explosion.qml` | 8-particle expanding explosion effect |
+| `generate_sounds.py` | Python script to generate placeholder .wav files |
+| `sounds/*.wav` | Placeholder sound effects (fire, explosion, heli_hum, splat) |
 
 ### main.qml sections
 
@@ -59,7 +61,7 @@ QML remake of the classic 1981 Apple II arcade game "Sabotage". Player controls 
 ## Roadmap (priority order)
 
 1. ~~**Component modularization**~~ ✓ Done — Turret.qml, Helicopter.qml, Paratrooper.qml, Explosion.qml extracted.
-2. **Sound effects** — Firing, explosions, helicopter hum, trooper splat. Use Qt Multimedia / SoundEffect QML type.
+2. ~~**Sound effects**~~ ✓ Done — fire, explosion, heli hum, splat via SoundEffect + generated placeholders. Replace sounds/*.wav with real assets anytime.
 3. **Apple ][ Mode** — Recreates the graphics of the original game (lo-res color palette, chunky pixels, black background).
 4. **High score persistence** — Save/load top scores via Qt.labs.settings or LocalStorage.
 5. **Difficulty selection** — Easy/Medium/Hard presets on title screen. Wire up the unused `lives` property.
