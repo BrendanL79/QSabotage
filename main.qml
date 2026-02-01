@@ -162,87 +162,13 @@ Window {
     // Helicopters
     Repeater {
         model: heliModel
-        Item {
-            x: hx; y: hy
-            visible: halive
-            // Body
-            Rectangle {
-                x: 0; y: 8; width: 40; height: 12
-                color: hcolor
-                radius: 6
-            }
-            // Cockpit
-            Rectangle {
-                x: hdir > 0 ? 32 : -2; y: 6; width: 10; height: 10
-                color: "#88ccff"
-                radius: 5
-                opacity: 0.7
-            }
-            // Tail
-            Rectangle {
-                x: hdir > 0 ? -12 : 40; y: 5; width: 14; height: 4
-                color: hcolor
-            }
-            Rectangle {
-                x: hdir > 0 ? -14 : 50; y: 0; width: 4; height: 10
-                color: hcolor
-            }
-            // Rotor
-            Rectangle {
-                id: rotor
-                x: 10; y: 6; width: 30; height: 2
-                color: "#ddd"
-                transformOrigin: Item.Center
-                SequentialAnimation on rotation {
-                    loops: Animation.Infinite
-                    NumberAnimation { to: 180; duration: 100 }
-                    NumberAnimation { to: 360; duration: 100 }
-                }
-            }
-        }
+        Helicopter {}
     }
 
     // Paratroopers
     Repeater {
         model: trooperModel
-        Item {
-            x: tx; y: ty
-            visible: talive
-            // Parachute
-            Item {
-                visible: tchute
-                // Canopy
-                Rectangle {
-                    x: -10; y: -28; width: 24; height: 14
-                    color: tcolor
-                    radius: 12
-                    opacity: 0.85
-                }
-                // Lines
-                Canvas {
-                    x: -10; y: -16; width: 24; height: 18
-                    onPaint: {
-                        var ctx = getContext("2d")
-                        ctx.strokeStyle = "#aaa"
-                        ctx.lineWidth = 1
-                        ctx.beginPath()
-                        ctx.moveTo(0, 0); ctx.lineTo(12, 18)
-                        ctx.moveTo(12, 0); ctx.lineTo(12, 18)
-                        ctx.moveTo(24, 0); ctx.lineTo(12, 18)
-                        ctx.stroke()
-                    }
-                }
-            }
-            // Body (stick figure)
-            Rectangle { x: 1; y: -4; width: 2; height: 8; color: "#fff" }
-            // Head
-            Rectangle { x: -1; y: -8; width: 6; height: 5; color: "#fda"; radius: 3 }
-            // Arms
-            Rectangle { x: -4; y: -2; width: 12; height: 2; color: "#fff" }
-            // Legs
-            Rectangle { x: -1; y: 4; width: 2; height: 6; color: "#fff"; rotation: -15 }
-            Rectangle { x: 3; y: 4; width: 2; height: 6; color: "#fff"; rotation: 15 }
-        }
+        Paratrooper {}
     }
 
     // Landed troopers (left side)
@@ -276,22 +202,7 @@ Window {
     // Explosions
     Repeater {
         model: explosionModel
-        Item {
-            x: ex; y: ey
-            Repeater {
-                model: 8
-                Rectangle {
-                    property real angle: index * 45 * Math.PI / 180
-                    property real dist: eframe * 3
-                    x: Math.cos(angle) * dist
-                    y: Math.sin(angle) * dist
-                    width: Math.max(1, 6 - eframe)
-                    height: width; radius: width/2
-                    color: eframe < 3 ? "#ffff00" : (eframe < 6 ? "#ff8800" : "#ff4400")
-                    opacity: Math.max(0, 1 - eframe / 10)
-                }
-            }
-        }
+        Explosion {}
     }
 
     function spawnExplosion(x, y) {
