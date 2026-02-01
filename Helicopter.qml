@@ -1,7 +1,7 @@
 import QtQuick
 
 Item {
-    x: hx; y: hy
+    x: hx; y: retroMode ? Math.round(hy / 3) * 3 : hy
     visible: halive
     property bool retroMode: false
 

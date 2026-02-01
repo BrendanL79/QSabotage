@@ -156,7 +156,7 @@ Window {
     Repeater {
         model: bulletModel
         Rectangle {
-            x: bx - 2; y: by - 2
+            x: bx - 2; y: (retroMode ? Math.round(by / 3) * 3 : by) - 2
             width: retroMode ? 3 : 4; height: retroMode ? 3 : 4
             radius: retroMode ? 0 : 2
             color: retroMode ? "#ffffff" : "#ffff00"

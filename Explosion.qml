@@ -1,7 +1,7 @@
 import QtQuick
 
 Item {
-    x: ex; y: ey
+    x: ex; y: retroMode ? Math.round(ey / 3) * 3 : ey
     property bool retroMode: false
 
     // Modern explosion
