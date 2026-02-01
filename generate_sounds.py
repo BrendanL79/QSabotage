@@ -55,7 +55,7 @@ def generate_heli_hum():
              math.sin(2 * math.pi * 170 * t) * 0.3 +
              math.sin(2 * math.pi * 40 * t) * 0.2)
         chop = 0.5 + 0.5 * math.sin(2 * math.pi * 12 * t)
-        samples.append(s * chop * 0.4)
+        samples.append(s * chop * 0.8)
     return samples
 
 def generate_splat():

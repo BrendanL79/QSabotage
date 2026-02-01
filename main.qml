@@ -25,7 +25,7 @@ Window {
         id: heliHumSound
         source: "sounds/heli_hum.wav"
         loops: SoundEffect.Infinite
-        volume: 0.4
+        volume: 0.7
     }
     SoundEffect { id: splatSound; source: "sounds/splat.wav" }
 
