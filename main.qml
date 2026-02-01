@@ -395,6 +395,7 @@ Window {
         text: "SCORE: " + score
         color: "#0f0"; font.pixelSize: 20; font.bold: true
         font.family: "Courier"
+        visible: !retroMode
     }
 
     Text {
@@ -402,12 +403,13 @@ Window {
         text: "LANDED: " + landedLeft + " | " + landedRight + " / " + maxLanded
         color: (landedLeft >= maxLanded - 1 || landedRight >= maxLanded - 1) ? "#f00" : "#ff0"
         font.pixelSize: 16; font.bold: true; font.family: "Courier"
+        visible: !retroMode
     }
 
     // Title screen
     Rectangle {
         anchors.fill: parent
-        color: "#000000aa"
+        color: retroMode ? "#000000" : "#000000aa"
         visible: !gameStarted
         Column {
             anchors.centerIn: parent
@@ -415,22 +417,24 @@ Window {
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: "S A B O T A G E"
-                color: "#ff4444"
+                color: retroMode ? "#ffffff" : "#ff4444"
                 font.pixelSize: 48; font.bold: true; font.family: "Courier"
             }
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: "← → Aim    SPACE Fire"
-                color: "#aaa"
+                color: retroMode ? "#ffffff" : "#aaa"
                 font.pixelSize: 18; font.family: "Courier"
             }
             Text {
+                visible: !retroMode
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: "Shoot helicopters & paratroopers!"
                 color: "#888"
                 font.pixelSize: 14; font.family: "Courier"
             }
             Text {
+                visible: !retroMode
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: "Don't let " + maxLanded + " troopers land on either side!"
                 color: "#888"
@@ -447,13 +451,19 @@ Window {
                     NumberAnimation { to: 1.0; duration: 800 }
                 }
             }
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "` to toggle Apple ][ mode"
+                color: retroMode ? "#888888" : "#666666"
+                font.pixelSize: 12; font.family: "Courier"
+            }
         }
     }
 
     // Game over screen
     Rectangle {
         anchors.fill: parent
-        color: "#000000cc"
+        color: retroMode ? "#000000" : "#000000cc"
         visible: gameOver
         Column {
             anchors.centerIn: parent
@@ -461,7 +471,7 @@ Window {
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: "GAME OVER"
-                color: "#ff0000"
+                color: retroMode ? "#ffffff" : "#ff0000"
                 font.pixelSize: 48; font.bold: true; font.family: "Courier"
                 SequentialAnimation on opacity {
                     loops: Animation.Infinite
@@ -476,6 +486,7 @@ Window {
                 font.pixelSize: 28; font.family: "Courier"
             }
             Text {
+                visible: !retroMode
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: "The paratroopers have overrun your position!"
                 color: "#aaa"
