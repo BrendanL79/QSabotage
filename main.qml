@@ -180,7 +180,7 @@ Window {
     // Paratroopers
     Repeater {
         model: trooperModel
-        Paratrooper {}
+        Paratrooper { retroMode: root.retroMode }
     }
 
     // Landed troopers (left side)
