@@ -80,6 +80,8 @@ Window {
         anchors.fill: parent
         angle: turretControl.angle
         groundY: root.height * 0.85
+        retroMode: root.retroMode
+        score: root.score
     }
 
     // Turret aiming control
