@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Window
+import QtMultimedia
 
 Window {
     id: root
@@ -16,6 +17,17 @@ Window {
     property int landedLeft: 0
     property int landedRight: 0
     property int maxLanded: 4
+
+    // Sound effects
+    SoundEffect { id: fireSound; source: "sounds/fire.wav" }
+    SoundEffect { id: explosionSound; source: "sounds/explosion.wav" }
+    SoundEffect {
+        id: heliHumSound
+        source: "sounds/heli_hum.wav"
+        loops: SoundEffect.Infinite
+        volume: 0.4
+    }
+    SoundEffect { id: splatSound; source: "sounds/splat.wav" }
 
     // Sky gradient
     Rectangle {
@@ -109,6 +121,7 @@ Window {
     ListModel { id: explosionModel }
 
     function fireBullet() {
+        fireSound.play()
         var rad = (turretControl.angle - 90) * Math.PI / 180
         var speed = 10
         bulletModel.append({
