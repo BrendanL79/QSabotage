@@ -56,7 +56,8 @@ QML remake of the classic 1981 Apple II arcade game "Sabotage". Player controls 
 
 - Co-authored with Claude; include `Co-Authored-By` in commits
 - Development happens on feature branches off `main`
-- No build system — run directly with `qml main.qml` or `qmlscene main.qml`
+- Run directly with `qml main.qml` for development (no build step needed)
+- Build standalone binary: `cmake -B build && cmake --build build && ./build/QSabotage`
 
 ## Roadmap (priority order)
 
