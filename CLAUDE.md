@@ -53,12 +53,12 @@ QML remake of the classic 1981 Apple II arcade game "Sabotage". Player controls 
 ## Conventions
 
 - Co-authored with Claude; include `Co-Authored-By` in commits
-- Branch `improvements1` is the active dev branch (ahead of `main`)
+- Development happens on feature branches off `main`
 - No build system — run directly with `qml main.qml` or `qmlscene main.qml`
 
 ## Roadmap (priority order)
 
-1. **Component modularization** — Split main.qml into separate QML files (Turret.qml, Helicopter.qml, Paratrooper.qml, Explosion.qml). This unblocks easier work on all subsequent features.
+1. ~~**Component modularization**~~ ✓ Done — Turret.qml, Helicopter.qml, Paratrooper.qml, Explosion.qml extracted.
 2. **Sound effects** — Firing, explosions, helicopter hum, trooper splat. Use Qt Multimedia / SoundEffect QML type.
 3. **Apple ][ Mode** — Recreates the graphics of the original game (lo-res color palette, chunky pixels, black background).
 4. **High score persistence** — Save/load top scores via Qt.labs.settings or LocalStorage.
