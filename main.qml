@@ -214,12 +214,12 @@ Window {
     // Explosions
     Repeater {
         model: explosionModel
-        Explosion {}
+        Explosion { retroMode: root.retroMode }
     }
 
-    function spawnExplosion(x, y) {
+    function spawnExplosion(x, y, etype) {
         explosionSound.play()
-        explosionModel.append({ ex: x, ey: y, eframe: 0 })
+        explosionModel.append({ ex: x, ey: y, eframe: 0, etype: etype || "trooper" })
     }
 
     // Main game timer
@@ -248,7 +248,7 @@ Window {
                         heliModel.set(h, { hx: heli.hx, hy: heli.hy, hvx: heli.hvx,
                             hdir: heli.hdir, halive: false, hcolor: heli.hcolor,
                             hdropTimer: heli.hdropTimer, hdropInterval: heli.hdropInterval })
-                        spawnExplosion(heli.hx + 20, heli.hy + 10)
+                        spawnExplosion(heli.hx + 20, heli.hy + 10, "heli")
                         score += 50
                         bulletModel.remove(i)
                         hitSomething = true
@@ -340,7 +340,7 @@ Window {
             for (var e = explosionModel.count - 1; e >= 0; e--) {
                 var exp = explosionModel.get(e)
                 if (exp.eframe > 10) { explosionModel.remove(e); continue }
-                explosionModel.set(e, { ex: exp.ex, ey: exp.ey, eframe: exp.eframe + 1 })
+                explosionModel.set(e, { ex: exp.ex, ey: exp.ey, eframe: exp.eframe + 1, etype: exp.etype })
             }
 
             // Increase difficulty
