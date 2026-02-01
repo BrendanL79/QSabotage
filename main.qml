@@ -157,10 +157,11 @@ Window {
         model: bulletModel
         Rectangle {
             x: bx - 2; y: by - 2
-            width: 4; height: 4
-            radius: 2
-            color: "#ffff00"
+            width: retroMode ? 3 : 4; height: retroMode ? 3 : 4
+            radius: retroMode ? 0 : 2
+            color: retroMode ? "#ffffff" : "#ffff00"
             Rectangle {
+                visible: !retroMode
                 x: -1; y: -1
                 width: 6; height: 6; radius: 3
                 color: "transparent"
@@ -189,11 +190,14 @@ Window {
         Item {
             x: root.width / 2 - 40 - index * 14
             y: root.height * 0.85 - 12
-            Rectangle { x: 1; y: 0; width: 2; height: 8; color: "#fff" }
-            Rectangle { x: -1; y: -4; width: 6; height: 5; color: "#fda"; radius: 3 }
-            Rectangle { x: -3; y: 2; width: 10; height: 2; color: "#fff" }
-            Rectangle { x: -1; y: 8; width: 2; height: 5; color: "#fff"; rotation: -10 }
-            Rectangle { x: 3; y: 8; width: 2; height: 5; color: "#fff"; rotation: 10 }
+            // Modern
+            Rectangle { visible: !retroMode; x: 1; y: 0; width: 2; height: 8; color: "#fff" }
+            Rectangle { visible: !retroMode; x: -1; y: -4; width: 6; height: 5; color: "#fda"; radius: 3 }
+            Rectangle { visible: !retroMode; x: -3; y: 2; width: 10; height: 2; color: "#fff" }
+            Rectangle { visible: !retroMode; x: -1; y: 8; width: 2; height: 5; color: "#fff"; rotation: -10 }
+            Rectangle { visible: !retroMode; x: 3; y: 8; width: 2; height: 5; color: "#fff"; rotation: 10 }
+            // Retro — small colored block
+            Rectangle { visible: retroMode; x: 0; y: 0; width: 6; height: 10; color: "#00cc00" }
         }
     }
 
@@ -203,11 +207,14 @@ Window {
         Item {
             x: root.width / 2 + 30 + index * 14
             y: root.height * 0.85 - 12
-            Rectangle { x: 1; y: 0; width: 2; height: 8; color: "#fff" }
-            Rectangle { x: -1; y: -4; width: 6; height: 5; color: "#fda"; radius: 3 }
-            Rectangle { x: -3; y: 2; width: 10; height: 2; color: "#fff" }
-            Rectangle { x: -1; y: 8; width: 2; height: 5; color: "#fff"; rotation: -10 }
-            Rectangle { x: 3; y: 8; width: 2; height: 5; color: "#fff"; rotation: 10 }
+            // Modern
+            Rectangle { visible: !retroMode; x: 1; y: 0; width: 2; height: 8; color: "#fff" }
+            Rectangle { visible: !retroMode; x: -1; y: -4; width: 6; height: 5; color: "#fda"; radius: 3 }
+            Rectangle { visible: !retroMode; x: -3; y: 2; width: 10; height: 2; color: "#fff" }
+            Rectangle { visible: !retroMode; x: -1; y: 8; width: 2; height: 5; color: "#fff"; rotation: -10 }
+            Rectangle { visible: !retroMode; x: 3; y: 8; width: 2; height: 5; color: "#fff"; rotation: 10 }
+            // Retro — small colored block
+            Rectangle { visible: retroMode; x: 0; y: 0; width: 6; height: 10; color: "#00cc00" }
         }
     }
 
