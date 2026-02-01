@@ -198,6 +198,7 @@ Window {
     }
 
     function spawnExplosion(x, y) {
+        explosionSound.play()
         explosionModel.append({ ex: x, ey: y, eframe: 0 })
     }
 
@@ -304,6 +305,7 @@ Window {
                         }
                     } else {
                         // Splat - no chute
+                        splatSound.play()
                         spawnExplosion(tnx, root.height * 0.85 - 10)
                     }
                     trooperModel.remove(t2)
