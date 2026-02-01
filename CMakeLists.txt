@@ -30,6 +30,7 @@ qt_add_executable(QSabotage main.cpp)
 qt_add_qml_module(QSabotage
     URI QSabotage
     VERSION 1.0
+    RESOURCE_PREFIX /
     QML_FILES
         main.qml
         Turret.qml
