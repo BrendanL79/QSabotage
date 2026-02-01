@@ -50,32 +50,11 @@ Window {
         color: "transparent"
     }
 
-    // Turret base
-    Rectangle {
-        id: turretBase
-        x: root.width / 2 - 20; y: root.height * 0.85 - 10
-        width: 40; height: 14
-        color: "#888"
-        radius: 3
-        Rectangle {
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.top
-            width: 20; height: 8
-            color: "#aaa"
-            radius: 4
-        }
-    }
-
-    // Turret barrel
-    Rectangle {
-        id: barrel
-        x: root.width / 2 - 2
-        y: root.height * 0.85 - 48
-        width: 4; height: 30
-        color: "#ccc"
-        antialiasing: true
-        transformOrigin: Item.Bottom
-        rotation: turretControl.angle
+    Turret {
+        id: turret
+        anchors.fill: parent
+        angle: turretControl.angle
+        groundY: root.height * 0.85
     }
 
     // Turret aiming control
