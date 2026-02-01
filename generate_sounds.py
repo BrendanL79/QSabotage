@@ -45,17 +45,21 @@ def generate_explosion():
     return samples
 
 def generate_heli_hum():
-    """Low-frequency drone loop (~500ms, seamless loop)."""
+    """Buzzy drone loop (~500ms, seamless loop)."""
     duration = 0.5
     n = int(SAMPLE_RATE * duration)
     samples = []
+    base_freq = 90
     for i in range(n):
         t = i / SAMPLE_RATE
-        s = (math.sin(2 * math.pi * 85 * t) * 0.5 +
-             math.sin(2 * math.pi * 170 * t) * 0.3 +
-             math.sin(2 * math.pi * 40 * t) * 0.2)
-        chop = 0.5 + 0.5 * math.sin(2 * math.pi * 12 * t)
-        samples.append(s * chop * 0.8)
+        # Sawtooth-like buzz via stacked odd+even harmonics
+        s = 0.0
+        for h in range(1, 10):
+            s += math.sin(2 * math.pi * base_freq * h * t) / h
+        s *= 0.35
+        # Mild chop for rotor feel
+        chop = 0.7 + 0.3 * math.sin(2 * math.pi * 18 * t)
+        samples.append(s * chop)
     return samples
 
 def generate_splat():
