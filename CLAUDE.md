@@ -5,31 +5,41 @@ QML remake of the classic 1981 Apple II arcade game "Sabotage". Player controls 
 ## Tech Stack
 
 - **Pure QML/Qt Quick 2.15** — no C++ backend
-- Single-file game: `main.qml` (~561 lines)
+- Orchestrator: `main.qml` (~451 lines) + 4 component files
 - 60 FPS timer-based game loop with AABB collision detection
 - Entity management via QML ListModels + Repeaters
 
 ## Architecture
 
-Currently a monolith in `main.qml`, organized in sections:
+### Component files
+
+| File | Description |
+|------|-------------|
+| `Turret.qml` | Turret base and barrel rendering |
+| `Helicopter.qml` | Helicopter body, cockpit, tail, animated rotor |
+| `Paratrooper.qml` | Stick figure with parachute canopy and lines |
+| `Explosion.qml` | 8-particle expanding explosion effect |
+
+### main.qml sections
 
 | Lines | Section |
 |-------|---------|
-| 1-19 | Window setup, game state properties |
+| 1-18 | Window setup, game state properties |
 | 20-51 | Background (sky gradient, stars, ground) |
-| 53-79 | Turret rendering |
-| 82-124 | Keyboard input handling |
-| 126-131 | Data models (bullets, helicopters, troopers, explosions) |
-| 132-160 | Bullet system |
-| 162-203 | Helicopter rendering (animated rotors) |
-| 205-274 | Paratrooper rendering (chute/no-chute/landed) |
-| 276-299 | Explosion particle system |
-| 301-424 | Main game loop (physics, collisions, spawning) |
-| 426-445 | Helicopter spawner with difficulty scaling |
-| 447-454 | Game restart function |
-| 456-469 | HUD (score, landed count) |
-| 471-515 | Title screen |
-| 517-560 | Game over screen |
+| 53-57 | Turret component instance |
+| 59-98 | Turret aiming control, keyboard input |
+| 100-103 | Data models (bullets, helicopters, troopers, explosions) |
+| 105-138 | Bullet system + rendering |
+| 140-143 | Helicopter Repeater (delegate: Helicopter.qml) |
+| 145-148 | Paratrooper Repeater (delegate: Paratrooper.qml) |
+| 150-175 | Landed troopers (left + right side) |
+| 177-180 | Explosion Repeater (delegate: Explosion.qml) |
+| 182-312 | Main game loop (physics, collisions, spawning) |
+| 314-333 | Helicopter spawner with difficulty scaling |
+| 335-342 | Game restart function |
+| 344-357 | HUD (score, landed count) |
+| 359-403 | Title screen |
+| 405-449 | Game over screen |
 
 ## Game Mechanics
 
