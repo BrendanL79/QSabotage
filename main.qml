@@ -505,4 +505,15 @@ Window {
             }
         }
     }
+
+    // CRT scanline overlay (retro mode only)
+    Repeater {
+        model: retroMode ? root.height / 3 : 0
+        Rectangle {
+            x: 0; y: index * 3
+            width: root.width; height: 1
+            color: "#000000"
+            opacity: 0.3
+        }
+    }
 }
