@@ -38,37 +38,37 @@ Item {
     // Retro base — white platform with score
     Rectangle {
         visible: retroMode
-        x: turret.width / 2 - 40; y: groundY - 20
-        width: 80; height: 20
+        x: turret.width / 2 - 40; y: groundY - 8
+        width: 80; height: 8
         color: "#ffffff"
 
         Text {
             anchors.centerIn: parent
             text: turret.score
             color: "#000000"
-            font.pixelSize: 14; font.bold: true; font.family: "Courier"
+            font.pixelSize: 7; font.bold: true; font.family: "Courier"
         }
     }
 
     // Retro stepped structure (orange)
     Rectangle {
         visible: retroMode
-        x: turret.width / 2 - 20; y: groundY - 36
-        width: 40; height: 16
+        x: turret.width / 2 - 16; y: groundY - 18
+        width: 32; height: 10
         color: "#cc6600"
     }
     Rectangle {
         visible: retroMode
-        x: turret.width / 2 - 12; y: groundY - 48
-        width: 24; height: 12
+        x: turret.width / 2 - 8; y: groundY - 24
+        width: 16; height: 6
         color: "#cc6600"
     }
 
-    // Retro barrel
+    // Retro barrel — same origin as modern barrel
     Rectangle {
         visible: retroMode
         x: turret.width / 2 - 2
-        y: groundY - 78
+        y: groundY - 48
         width: 4; height: 30
         color: "#ffffff"
         antialiasing: true
