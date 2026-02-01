@@ -29,6 +29,15 @@ Window {
     }
     SoundEffect { id: splatSound; source: "sounds/splat.wav" }
 
+    // Heli hum control — plays when helis exist during active game
+    property bool _heliHumShouldPlay: heliModel.count > 0 && gameStarted && !gameOver
+    on_HeliHumShouldPlayChanged: {
+        if (_heliHumShouldPlay)
+            heliHumSound.play()
+        else
+            heliHumSound.stop()
+    }
+
     // Sky gradient
     Rectangle {
         anchors.fill: parent
@@ -350,6 +359,10 @@ Window {
     }
 
     function restartGame() {
+        fireSound.stop()
+        explosionSound.stop()
+        splatSound.stop()
+        heliHumSound.stop()
         score = 0; lives = 3; gameOver = false; difficulty = 1.0
         landedLeft = 0; landedRight = 0
         bulletModel.clear(); heliModel.clear()
