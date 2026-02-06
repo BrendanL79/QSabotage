@@ -21,6 +21,8 @@ Window {
     property int landedLeftCount: 0
     property int landedRightCount: 0
     property bool turretExploded: false
+    property string movingSide: "" // "left", "right", or ""
+    property int moveTimerCount: 0
 
     // Sound effects
     SoundEffect { id: fireSound; source: "sounds/fire.wav" }
@@ -340,12 +342,12 @@ Window {
                         }
                         
                         // Check if 4th soldier landed on either side
-                        if (landedLeftCount === maxLanded) {
+                        if (landedLeftCount === maxLanded && movingSide === "") {
                             // Start moving left soldiers toward turret
-                            startSoldierMovement("left")
-                        } else if (landedRightCount === maxLanded) {
+                            movingSide = "left"
+                        } else if (landedRightCount === maxLanded && movingSide === "") {
                             // Start moving right soldiers toward turret
-                            startSoldierMovement("right")
+                            movingSide = "right"
                         }
                     } else {
                         // Splat - no chute
@@ -372,6 +374,52 @@ Window {
         }
     }
 
+    // Soldier movement timer
+    Timer {
+        id: soldierMoveTimer
+        interval: 16
+        repeat: true
+        running: false
+        
+        onTriggered: {
+            if (movingSide === "") {
+                this.running = false
+                return
+            }
+            
+            var model = movingSide === "left" ? landedTroopersLeft : landedTroopersRight
+            var turretX = root.width / 2
+            
+            if (model.count === 0) {
+                // All soldiers reached turret, explode it
+                spawnExplosion(root.width / 2, root.height * 0.85 - 20, "turret")
+                turretExploded = true
+                gameOver = true
+                movingSide = ""
+                this.running = false
+                return
+            }
+            
+            // Move the first soldier in the list (furthest from turret)
+            var soldier = model.get(0)
+            var targetX = turretX - (movingSide === "left" ? 20 : -20)
+            
+            if (movingSide === "left") {
+                if (soldier.x > targetX) {
+                    model.setProperty(0, "x", soldier.x - 2)
+                } else {
+                    model.remove(0)
+                }
+            } else {
+                if (soldier.x < targetX) {
+                    model.setProperty(0, "x", soldier.x + 2)
+                } else {
+                    model.remove(0)
+                }
+            }
+        }
+    }
+
     // Helicopter spawner
     Timer {
         running: gameStarted && !gameOver && !turretExploded
@@ -394,45 +442,8 @@ Window {
     }
 
     function startSoldierMovement(direction) {
-        var model = direction === "left" ? landedTroopersLeft : landedTroopersRight
-        var startX = direction === "left" ? 0 : root.width
-        var turretX = root.width / 2
-        
-        // Create a timer to move soldiers one by one
-        var moveTimer = Timer {
-            interval: 16
-            repeat: true
-            running: true
-            
-            onTriggered: {
-                if (model.count === 0) {
-                    // All soldiers reached turret, explode it
-                    spawnExplosion(root.width / 2, root.height * 0.85 - 20, "turret")
-                    turretExploded = true
-                    gameOver = true
-                    this.running = false
-                    return
-                }
-                
-                // Move the first soldier in the list (furthest from turret)
-                var soldier = model.get(0)
-                var targetX = turretX - (direction === "left" ? 20 : -20)
-                
-                if (direction === "left") {
-                    if (soldier.x > targetX) {
-                        model.setProperty(0, "x", soldier.x - 2)
-                    } else {
-                        model.remove(0)
-                    }
-                } else {
-                    if (soldier.x < targetX) {
-                        model.setProperty(0, "x", soldier.x + 2)
-                    } else {
-                        model.remove(0)
-                    }
-                }
-            }
-        }
+        // This function is now handled by setting movingSide property
+        // The soldierMoveTimer will pick it up
     }
 
     function restartGame() {
@@ -444,6 +455,7 @@ Window {
         landedLeft = 0; landedRight = 0
         landedLeftCount = 0; landedRightCount = 0
         turretExploded = false
+        movingSide = ""
         bulletModel.clear(); heliModel.clear()
         trooperModel.clear(); explosionModel.clear()
         landedTroopersLeft.clear(); landedTroopersRight.clear()
