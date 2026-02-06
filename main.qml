@@ -18,6 +18,9 @@ Window {
     property int landedRight: 0
     property int maxLanded: 4
     property bool retroMode: false
+    property int landedLeftCount: 0
+    property int landedRightCount: 0
+    property bool turretExploded: false
 
     // Sound effects
     SoundEffect { id: fireSound; source: "sounds/fire.wav" }
@@ -82,6 +85,7 @@ Window {
         groundY: root.height * 0.85
         retroMode: root.retroMode
         score: root.score
+        visible: !turretExploded
     }
 
     // Turret aiming control
@@ -92,7 +96,7 @@ Window {
         property bool firingRight: false
 
         Timer {
-            running: gameStarted && !gameOver
+            running: gameStarted && !gameOver && !turretExploded
             interval: 16; repeat: true
             onTriggered: {
                 if (turretControl.firingLeft && turretControl.angle > -80)
@@ -139,6 +143,8 @@ Window {
     ListModel { id: heliModel }
     ListModel { id: trooperModel }
     ListModel { id: explosionModel }
+    ListModel { id: landedTroopersLeft }
+    ListModel { id: landedTroopersRight }
 
     function fireBullet() {
         fireSound.play()
@@ -186,10 +192,10 @@ Window {
 
     // Landed troopers (left side)
     Repeater {
-        model: landedLeft
+        model: landedTroopersLeft
         Item {
-            x: root.width / 2 - 40 - index * 14
-            y: root.height * 0.85 - 12
+            x: modelData.x
+            y: modelData.y
             // Modern
             Rectangle { visible: !retroMode; x: 1; y: 0; width: 2; height: 8; color: "#fff" }
             Rectangle { visible: !retroMode; x: -1; y: -4; width: 6; height: 5; color: "#fda"; radius: 3 }
@@ -203,10 +209,10 @@ Window {
 
     // Landed troopers (right side)
     Repeater {
-        model: landedRight
+        model: landedTroopersRight
         Item {
-            x: root.width / 2 + 30 + index * 14
-            y: root.height * 0.85 - 12
+            x: modelData.x
+            y: modelData.y
             // Modern
             Rectangle { visible: !retroMode; x: 1; y: 0; width: 2; height: 8; color: "#fff" }
             Rectangle { visible: !retroMode; x: -1; y: -4; width: 6; height: 5; color: "#fda"; radius: 3 }
@@ -232,7 +238,7 @@ Window {
     // Main game timer
     Timer {
         id: gameTimer
-        running: gameStarted && !gameOver
+        running: gameStarted && !gameOver && !turretExploded
         interval: 16; repeat: true
         onTriggered: {
             // Update bullets
@@ -325,10 +331,21 @@ Window {
                     // Landed
                     if (tp.tchute) {
                         // Safe landing
-                        if (tnx < root.width / 2) landedLeft++
-                        else landedRight++
-                        if (landedLeft >= maxLanded || landedRight >= maxLanded) {
-                            gameOver = true
+                        if (tnx < root.width / 2) {
+                            landedTroopersLeft.append({x: tnx, y: root.height * 0.85 - 12})
+                            landedLeftCount++
+                        } else {
+                            landedTroopersRight.append({x: tnx, y: root.height * 0.85 - 12})
+                            landedRightCount++
+                        }
+                        
+                        // Check if 4th soldier landed on either side
+                        if (landedLeftCount === maxLanded) {
+                            // Start moving left soldiers toward turret
+                            startSoldierMovement("left")
+                        } else if (landedRightCount === maxLanded) {
+                            // Start moving right soldiers toward turret
+                            startSoldierMovement("right")
                         }
                     } else {
                         // Splat - no chute
@@ -357,7 +374,7 @@ Window {
 
     // Helicopter spawner
     Timer {
-        running: gameStarted && !gameOver
+        running: gameStarted && !gameOver && !turretExploded
         interval: Math.max(1000, 3000 / difficulty)
         repeat: true
         onTriggered: {
@@ -376,6 +393,48 @@ Window {
         }
     }
 
+    function startSoldierMovement(direction) {
+        var model = direction === "left" ? landedTroopersLeft : landedTroopersRight
+        var startX = direction === "left" ? 0 : root.width
+        var turretX = root.width / 2
+        
+        // Create a timer to move soldiers one by one
+        var moveTimer = Timer {
+            interval: 16
+            repeat: true
+            running: true
+            
+            onTriggered: {
+                if (model.count === 0) {
+                    // All soldiers reached turret, explode it
+                    spawnExplosion(root.width / 2, root.height * 0.85 - 20, "turret")
+                    turretExploded = true
+                    gameOver = true
+                    this.running = false
+                    return
+                }
+                
+                // Move the first soldier in the list (furthest from turret)
+                var soldier = model.get(0)
+                var targetX = turretX - (direction === "left" ? 20 : -20)
+                
+                if (direction === "left") {
+                    if (soldier.x > targetX) {
+                        model.setProperty(0, "x", soldier.x - 2)
+                    } else {
+                        model.remove(0)
+                    }
+                } else {
+                    if (soldier.x < targetX) {
+                        model.setProperty(0, "x", soldier.x + 2)
+                    } else {
+                        model.remove(0)
+                    }
+                }
+            }
+        }
+    }
+
     function restartGame() {
         fireSound.stop()
         explosionSound.stop()
@@ -383,8 +442,11 @@ Window {
         heliHumSound.stop()
         score = 0; lives = 3; gameOver = false; difficulty = 1.0
         landedLeft = 0; landedRight = 0
+        landedLeftCount = 0; landedRightCount = 0
+        turretExploded = false
         bulletModel.clear(); heliModel.clear()
         trooperModel.clear(); explosionModel.clear()
+        landedTroopersLeft.clear(); landedTroopersRight.clear()
         turretControl.angle = 0
         gameStarted = true
     }
@@ -400,8 +462,8 @@ Window {
 
     Text {
         x: root.width - 200; y: 10
-        text: "LANDED: " + landedLeft + " | " + landedRight + " / " + maxLanded
-        color: (landedLeft >= maxLanded - 1 || landedRight >= maxLanded - 1) ? "#f00" : "#ff0"
+        text: "LANDED: " + landedLeftCount + " | " + landedRightCount + " / " + maxLanded
+        color: (landedLeftCount >= maxLanded - 1 || landedRightCount >= maxLanded - 1) ? "#f00" : "#ff0"
         font.pixelSize: 16; font.bold: true; font.family: "Courier"
         visible: !retroMode
     }
