@@ -14,8 +14,6 @@ Window {
     property bool gameOver: false
     property bool gameStarted: false
     property real difficulty: 1.0
-    property int landedLeft: 0
-    property int landedRight: 0
     property int maxLanded: 4
     property bool retroMode: false
     property int landedLeftCount: 0
@@ -452,7 +450,6 @@ Window {
         splatSound.stop()
         heliHumSound.stop()
         score = 0; lives = 3; gameOver = false; difficulty = 1.0
-        landedLeft = 0; landedRight = 0
         landedLeftCount = 0; landedRightCount = 0
         turretExploded = false
         movingSide = ""
